@@ -8,12 +8,13 @@ class Temple
 
     private $_SQL;
     
-    public function __construct(&$_SQL)
+    public function __construct(&$_SQL, $id)
     {
         $this->_SQL = $_SQL;
+        $this->id = $id;
     }
 
-    public function loadFromMemberId($member_id)
+    public function loadFromId()
     {
         $req = 'SELECT id, inventory_id, name, level FROM temple WHERE member_id = :member_id';
     
@@ -59,6 +60,26 @@ class Temple
     public function getLevel()
     {
         return $this->level;
+    }
+
+    public function setId($id)
+    {
+        $this->id = $id;
+    }
+
+    public function setInventory($inventory)
+    {
+        $this->inventory = $inventory;
+    }
+
+    public function setName($name)
+    {
+        $this->name = $name;
+    }
+
+    public function setLevel($level)
+    {
+        $this->level = $level;
     }
 }
 ?>

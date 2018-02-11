@@ -4,33 +4,29 @@ class Member {
     protected $login;
     protected $password;
 
-    protected $temple;
-    protected $inventory;
+    protected $villages;
 
     private $_SQL;
 
     public function __construct(&$_SQL, $id)
     {
         $this->_SQL = $_SQL;
-
         $this->id = $id;
     }
 
     public function loadAccountDataFromMemberId()
     {
         // We don't care bout member data, $_SESSION already store them
-        // So, here, $id is already checked
-        $this->temple = new Temple($this->_SQL);
-        
-        if(!$this->temple->loadFromMemberId($this->id))
-            return false;
+        // So, here, member id is already checked
 
-        $this->inventory = new Inventory($this->_SQL, $_SESSION['inventory_id']);
+        // We need to find member village
+        // TODO : When a member have several villages, it's important to select only the one with the temple
+        $this->villages = Village::loadListFromMemberId($this->_SQL, $this->id);
 
-        if(!$this->inventory->loadFromId())
-            return false;
+        if(is_array($this->villages))
+            return true;
 
-        return true;        
+        return false;  
     }
 
     public function getId()
@@ -43,14 +39,9 @@ class Member {
         return $this->login;
     }
 
-    public function getTemple()
+    public function getVillages()
     {
-        return $this->temple;
-    }
-
-    public function getInventory()
-    {
-        return $this->inventory;
+        return $this->villages;
     }
 }
 ?>

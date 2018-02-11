@@ -1,7 +1,7 @@
 <?php
 if(!empty($_POST['login']) && !empty($_POST['password']))
 {
-    $req = 'SELECT id, inventory_id, login, password FROM member WHERE login = :login';
+    $req = 'SELECT id, login, password FROM member WHERE login = :login';
     
     $rep = $_SQL->prepare($req);
     
@@ -15,7 +15,6 @@ if(!empty($_POST['login']) && !empty($_POST['password']))
         {
             $_SESSION['login'] = $resultat[0]['login'];
             $_SESSION['id'] = $resultat[0]['id'];
-            $_SESSION['inventory_id'] = $resultat[0]['inventory_id'];
             
             header('Location: index.php');
             

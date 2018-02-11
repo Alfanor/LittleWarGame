@@ -26,21 +26,42 @@ else
 
     else
     {
-        echo '  <ul>
-                    <li>' . $_LANGUAGE['FR']['RESUME_TEMPLE_NAME'] . ' ' . $membre->getTemple()->GetName() . '</li>
-                    <li>' . $_LANGUAGE['FR']['RESUME_TEMPLE_LEVEL'] . ' ' . $membre->getTemple()->getLevel() . '</li>
-                    <li>' . $_LANGUAGE['FR']['RESUME_RESSOURCES'] . '<ul>';
+        // Village list and global ressources
+        echo $_LANGUAGE['FR']['RESUME_VILLAGES'];
+        echo '<ul>';
+        
+        foreach($membre->getVillages() as $village)
+            echo '<li>' . $village->getName() . '</li>';
 
-        foreach($membre->getInventory()->getRessources() as $id => $amount)
+        echo '</ul><br />';
+
+        echo $_LANGUAGE['FR']['RESUME_RESSOURCES'];
+        echo '<ul>';
+
+        foreach($ressources as $id => $amount)
             echo '<li>' . $_LANGUAGE['FR']['RESSOURCE_' . $id] . ' : ' . $amount . '</li>';
 
-        echo '  </ul>
-                    <li>' . $_LANGUAGE['FR']['RESUME_TEMPLE_RESSOURCES'] . '<ul>';
+        echo '</ul><br />';
 
-        foreach($membre->getTemple()->getInventory()->getRessources() as $id => $amount)
-            echo '<li>' . $_LANGUAGE['FR']['RESSOURCE_' . $id] . ' : ' . $amount . '</li>';
+        // If there is a temple, we can list onformations about it
+        if(isset($_SESSION['temple']))
+        {
+            echo $_LANGUAGE['FR']['RESUME_TEMPLE'];
 
-        echo '</ul>  </ul>';
+            echo '  <ul>
+                        <li>' . $_LANGUAGE['FR']['RESUME_TEMPLE_VILLAGE'] . ' ' . $village_temple->GetName() . '</li>
+                        <li>' . $_LANGUAGE['FR']['RESUME_TEMPLE_NAME'] . ' ' . $village_temple->getTemple()->GetName() . '</li>
+                        <li>' . $_LANGUAGE['FR']['RESUME_TEMPLE_LEVEL'] . ' ' . $village_temple->getTemple()->getLevel() . '</li>
+                        <li>' . $_LANGUAGE['FR']['RESUME_TEMPLE_RESSOURCES'] . '
+                            <ul>';
+
+            foreach($village_temple->getTemple()->getInventory()->getRessources() as $id => $amount)
+                echo '<li>' . $_LANGUAGE['FR']['RESSOURCE_' . $id] . ' : ' . $amount . '</li>';
+
+            echo '          </ul> 
+                        </li> 
+                    </ul>';
+        }
     }
 }
 ?>
