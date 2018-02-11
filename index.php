@@ -11,6 +11,7 @@ session_start();
 
 require_once('Configuration/SQL.php');
 require_once('Configuration/Page.php');
+require_once('Vues/Langage/FR/menu.php');
 
 $_CSS = array();
 $_JS = array();
