@@ -26,12 +26,20 @@
       <div id="conteneur">
          <div id="header">LittleWarGame</div>
 
-         <div id="menu">
-            <ul>
-               <li><a href="?p=accueil"><?php echo $_LANGUAGE['FR']['MENU_ACCUEIL']; ?></a></li>
-               <li><a href="?p=village"><?php echo $_LANGUAGE['FR']['MENU_VILLAGE']; ?></a></li>
-               <li><a href="?p=temple"><?php echo $_LANGUAGE['FR']['MENU_TEMPLE']; ?></a></li>
-            </ul>
-         </div>
+         <?php
+         if(isset($_SESSION['id']))
+         {
+         ?>
 
+            <div id="menu">
+               <ul>
+                  <li><a href="?p=accueil"><?php echo $_LANGUAGE['FR']['MENU_ACCUEIL']; ?></a></li>
+                  <li><a href="?p=village"><?php echo $_LANGUAGE['FR']['MENU_VILLAGE']; ?></a></li>
+                  <li><a href="?p=temple"><?php echo $_LANGUAGE['FR']['MENU_TEMPLE']; ?></a></li>
+               </ul>
+            </div>
+         <?php
+         }
+         ?>
+         
          <div id="content">
