@@ -1,3 +1,5 @@
 <?php
-$pages = array('accueil', 'connexion', 'deconnexion', 'village');
+$public_pages = array('accueil', 'connexion');
+
+$member_pages = array('deconnexion', 'village');
 ?>

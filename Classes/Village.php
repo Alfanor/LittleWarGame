@@ -59,6 +59,29 @@ class Village
         return false;
     }
     
+    public static function loadMenuListFromMemberId(&$_SQL, $id)
+    {
+        $req = 'SELECT id, name FROM village WHERE member_id = :id';
+
+        $rep = $_SQL->prepare($req);
+        
+        $rep->execute(array(':id' => $id));
+        
+        $resultat = $rep->fetchAll();
+
+        if(count($resultat) > 0)
+        {
+            $villages = array();
+
+            foreach($resultat as $village)
+                $villages[$village['id']] = $village['name'];
+
+            return $villages;
+        }
+
+        return false;
+    }
+
     public static function loadListFromMemberId(&$_SQL, $id)
     {
         $req = 'SELECT  v.id as v_id, 

@@ -18,7 +18,12 @@ $_JS = array();
 
 (!empty($_GET['p'])) ? ($page_demandee = $_GET['p']) : ($page_demandee = null);
 
-if(isset($_SESSION['id']) && in_array($page_demandee, $pages))
+if(in_array($page_demandee, $public_pages))
+{
+    require_once('Controleurs/' . $page_demandee . '.php');
+}
+
+else if(!empty($_SESSION['id']) && in_array($page_demandee, $member_pages))
 {
     require_once('Controleurs/' . $page_demandee . '.php');
 }

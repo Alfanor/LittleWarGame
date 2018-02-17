@@ -37,8 +37,8 @@
                   <li><?php echo $_LANGUAGE['FR']['MENU_VILLAGE']; ?><br/>
                      <ul class="submenu">
                         <?php
-                        foreach($membre->getVillages() as $village)
-                           echo '<li><a href="?p=village&amp;id=' . $village->getId() . '">' . $village->getName() . '</a></li>'
+                        foreach($_SESSION['villages'] as $id => $name)
+                           echo '<li><a href="?p=village&amp;id=' . $id . '">' . $name . '</a></li>'
                         ?>
                      </ul>
                   </li>

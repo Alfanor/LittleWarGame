@@ -18,7 +18,15 @@ if(!empty($_POST['login']) && !empty($_POST['password']))
 
             // Au passage on va récupérer les villages du membre pour les stocker en session
             // et pouvoir les afficher dans le menu sans devoir recharger les informations à chaque page
-            
+            $villages = Village::loadMenuListFromMemberId($_SQL, $_SESSION['id']);
+
+            // Il est impossible de ne pas avoir de village
+            if($villages === false)
+            {
+                header('Location : index.php?p=deconnexion');
+            }
+
+            $_SESSION['villages'] = $villages;
             
             header('Location: index.php');
             
