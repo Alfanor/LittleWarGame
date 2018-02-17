@@ -15,6 +15,10 @@ if(!empty($_POST['login']) && !empty($_POST['password']))
         {
             $_SESSION['login'] = $resultat[0]['login'];
             $_SESSION['id'] = $resultat[0]['id'];
+
+            // Au passage on va récupérer les villages du membre pour les stocker en session
+            // et pouvoir les afficher dans le menu sans devoir recharger les informations à chaque page
+            
             
             header('Location: index.php');
             

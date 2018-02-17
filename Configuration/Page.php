@@ -1,3 +1,3 @@
 <?php
-$pages = array('accueil', 'connexion', 'deconnexion');
+$pages = array('accueil', 'connexion', 'deconnexion', 'village');
 ?>

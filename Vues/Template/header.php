@@ -32,9 +32,16 @@
          ?>
 
             <div id="menu">
-               <ul>
+               <ul class="menu">
                   <li><a href="?p=accueil"><?php echo $_LANGUAGE['FR']['MENU_ACCUEIL']; ?></a></li>
-                  <li><a href="?p=village"><?php echo $_LANGUAGE['FR']['MENU_VILLAGE']; ?></a></li>
+                  <li><?php echo $_LANGUAGE['FR']['MENU_VILLAGE']; ?><br/>
+                     <ul class="submenu">
+                        <?php
+                        foreach($membre->getVillages() as $village)
+                           echo '<li><a href="?p=village&amp;id=' . $village->getId() . '">' . $village->getName() . '</a></li>'
+                        ?>
+                     </ul>
+                  </li>
                   <li><a href="?p=temple"><?php echo $_LANGUAGE['FR']['MENU_TEMPLE']; ?></a></li>
                </ul>
             </div>

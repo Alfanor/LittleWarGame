@@ -15,6 +15,50 @@ class Village
         $this->id = $id;
     }
 
+    public function loadFromId()
+    {
+        $req = 'SELECT  v.id as v_id, 
+                        v.name as v_name, 
+                        v.member_id, 
+                        v.inventory_id as v_inventory, 
+                        t.id as t_id, 
+                        t.name as t_name, 
+                        t.inventory_id as t_inventory,
+                        t.level as t_level 
+                FROM village v 
+                LEFT JOIN temple t ON t.village_id = v.id 
+                WHERE v.id = :id';
+
+        $rep = $this->_SQL->prepare($req);
+        
+        $rep->execute(array(':id' => $this->id));
+        
+        $resultat = $rep->fetchAll();
+
+        if(count($resultat) == 1)
+        {
+            $this->name = $resultat[0]['v_name'];
+            $this->inventory = new Inventory($this->_SQL, $resultat[0]['v_inventory']);
+            $this->inventory->loadFromId();
+
+            if(isset($resultat[0]['t_id']))
+            {
+                $this->temple = new Temple($this->_SQL, $resultat[0]['t_id']);
+                    
+                $this->temple->setName($resultat[0]['t_name']);
+                $this->temple->setLevel($resultat[0]['t_level']);
+                $this->temple->setInventory(new Inventory($this->_SQL, $resultat[0]['t_inventory']));
+    
+                if(!$this->temple->GetInventory()->loadFromId())
+                    return false;
+            }
+
+            return true;
+        }
+
+        return false;
+    }
+    
     public static function loadListFromMemberId(&$_SQL, $id)
     {
         $req = 'SELECT  v.id as v_id, 

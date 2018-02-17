@@ -18,7 +18,7 @@ $_JS = array();
 
 (!empty($_GET['p'])) ? ($page_demandee = $_GET['p']) : ($page_demandee = null);
 
-if(in_array($page_demandee, $pages))
+if(isset($_SESSION['id']) && in_array($page_demandee, $pages))
 {
     require_once('Controleurs/' . $page_demandee . '.php');
 }
