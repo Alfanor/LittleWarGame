@@ -11,8 +11,6 @@ if(!empty($village->getTemple()))
         echo '<li>' . $_LANGUAGE['FR']['RESSOURCE_' . $id] . ' : ' . $amount . '</li>';
 
     echo '</ul>';
-	
-	echo '<h1>Modif de hawthorne</h1>';
 }
 
 else
