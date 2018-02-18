@@ -6,7 +6,7 @@
 }
 
 else {
-    $dsn = 'mysql:dbname=spartan_academy;host=127.0.0.1';
+    $dsn = 'mysql:dbname=littlewargame;host=127.0.0.1';
     $user = 'littlewargame';
     $password = 'littlewargame';
 }

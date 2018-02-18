@@ -13,6 +13,9 @@ if(!empty($village->getTemple()))
     echo '</ul>';
 }
 
+else
+    echo '<br />';
+
 echo '<br />' . $_LANGUAGE['FR']['VILLAGE_RESSOURCES'];
 
 echo '<ul>';

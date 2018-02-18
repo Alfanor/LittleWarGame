@@ -13,9 +13,13 @@ class Inventory
         $this->id = $id;
     }
 
+    /**
+     *  This function get the ressources of the inventory.
+     *  Be careful, it's supposed that the id is always correct !
+     */
     public function loadFromId()
     {
-        // On sélectionne toutes les ressources liées
+        // Select all the ressources for this inventory
         $req = 'SELECT ressource_id, amount FROM inventory_ressource WHERE inventory_id = :id';
     
         $rep = $this->_SQL->prepare($req);
@@ -28,11 +32,9 @@ class Inventory
         {
             foreach($resultat as $ressource)
                 $this->ressources[$ressource['ressource_id']] = $ressource['amount'];
-
-            return true;
         }
 
-        return false; 
+        return true; 
     }
 
     public function getRessources()
