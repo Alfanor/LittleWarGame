@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : localhost
--- Généré le :  Dim 18 fév. 2018 à 14:36
+-- Généré le :  Dim 18 fév. 2018 à 14:49
 -- Version du serveur :  10.1.30-MariaDB
 -- Version de PHP :  7.2.1
 
@@ -21,6 +21,8 @@ SET time_zone = "+00:00";
 --
 -- Base de données :  `littlewargame`
 --
+CREATE DATABASE IF NOT EXISTS `littlewargame` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+USE `littlewargame`;
 
 -- --------------------------------------------------------
 
