@@ -9,7 +9,8 @@ function __autoload($classe) {
 
 session_start();
 
-require_once('Configuration/SQL.php');
+$_SQL = SQL::getInstance();
+
 require_once('Configuration/Page.php');
 require_once('Vues/Langage/FR/menu.php');
 
