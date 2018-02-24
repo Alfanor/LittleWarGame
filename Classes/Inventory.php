@@ -27,27 +27,28 @@ class Inventory
      */
     public function loadFromId()
     {
-        // We have to be sure that this Inventory exist
-        $req = 'SELECT COUNT(id) as is_exist FROM inventory WHERE id = :id';
+        // We want to select all ressources of this Inventory, only in the case that this inventory exist
+        $req = 'SELECT  (CASE 
+                            WHEN inv.id IS NULL THEN 1
+                            ELSE 0
+                        END) AS unknow_id, ir.ressource_id, ir.amount 
+                FROM 
+                    inventory AS inv
+                LEFT JOIN 
+                    inventory_ressource AS  ir
+                    ON ir.inventory_id = inv.id
+                WHERE inv.id = :id';
+       
         $rep = $this->_SQL->prepare($req); 
        
         $rep->execute(array(':id' => $this->id));
         $resultat = $rep->fetchAll();
     
-        if($resultat[0]['is_exist'] > 0)
-        {  
-            // Select all the ressources for this Inventory
-            $req = 'SELECT ressource_id, amount FROM inventory_ressource WHERE inventory_id = :id';    
-            $rep = $this->_SQL->prepare($req);
-            
-            $rep->execute(array(':id' => $this->id));        
-            $resultat = $rep->fetchAll();
-
-            if(count($resultat) > 0)
-            {
-                foreach($resultat as $ressource)
-                    $this->ressources[$ressource['ressource_id']] = $ressource['amount'];
-            }
+        // If there is no result, the inventory not exist
+        if(count($resultat) > 0)
+        {
+            foreach($resultat as $ressource)
+                $this->ressources[$ressource['ressource_id']] = $ressource['amount'];               
 
             return true;
         }
