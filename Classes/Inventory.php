@@ -1,21 +1,29 @@
 <?php
+/**
+ * @class Inventory Class
+ * @brief This class store all Ressources belonging to another object like a Temple or a Village.
+ */
 class Inventory
 {
-    protected $id;
-    protected $ressources = array();
+    protected $id; //!<@brief The Inventory ID
+    protected $ressources = array(); //!<@brief The Ressources list in this inventory
     
-    private $_SQL;
+    private $_SQL; //!<@brief Reference on the SQL connexion
 
-    public function __construct(&$_SQL, $id)
+    /**
+     *  @brief Constructor for the class Inventory.
+     *  @param $id the Inventory ID
+     *  @return returns the initialized Inventory object
+     */
+    public function __construct($id)
     {
-        $this->_SQL = $_SQL;
-
+        $this->_SQL = SQL::getInstance();
         $this->id = $id;
     }
 
     /**
-     *  This function get the ressources of the inventory.
-     *  Be careful, it's supposed that the id is always correct !
+     *  @brief This method load the ressources of this inventory based on the id attribute.
+     *  @return returns true if it's succeed
      */
     public function loadFromId()
     {
@@ -37,6 +45,36 @@ class Inventory
         return true; 
     }
 
+    /**
+     *  @brief This method define the fields to save when we ask PHP for serialize a Inventory object.
+     *  @return returns the list of attribute to save
+     */
+    public function __sleep()
+    {
+        return array('id', 'ressources');
+    }
+
+    /**
+     *  @brief This method get an reference on the current SQL instance when PHP deserialize a Inventory object.
+     */
+    public function __wakeup()
+    {
+        $this->_SQL = SQL::getInstance();
+    }
+
+    /**
+     *  @brief Getter for Inventory ID.
+     *  @return returns the Inventory ID
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     *  @brief Getter for Inventory Ressources list.
+     *  @return returns the Inventory Ressources list
+     */
     public function getRessources()
     {
         return $this->ressources;

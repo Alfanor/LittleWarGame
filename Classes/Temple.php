@@ -8,39 +8,28 @@ class Temple
 
     private $_SQL;
     
-    public function __construct(&$_SQL, $id)
+    public function __construct($id)
     {
-        $this->_SQL = $_SQL;
+        $this->_SQL = SQL::getInstance();
         $this->id = $id;
     }
 
-    public function loadFromId()
+    /**
+     *  @brief This method define the fields to save when we ask PHP for serialize a Temple object.
+     *  @return returns the list of attribute to save
+     */
+    public function __sleep()
     {
-        $req = 'SELECT id, inventory_id, name, level FROM temple WHERE member_id = :member_id';
-    
-        $rep = $this->_SQL->prepare($req);
-        
-        $rep->execute(array(':member_id' => $member_id));
-        
-        $resultat = $rep->fetchAll();
+        return array('id', 'inventory', 'name', 'level');
+    }
 
-        if(count($resultat) == 1)
-        {
-            $this->id = $resultat[0]['id'];
-            $this->id_membre = $member_id;
-            $this->name = $resultat[0]['name'];
-            $this->level = $resultat[0]['level'];
-
-            $this->inventory = new Inventory($this->_SQL, $resultat[0]['inventory_id']);
-
-            if($this->inventory->loadFromId())
-                return true;
-
-            return false;
-        }
-
-        return false;
-    } 
+    /**
+     *  @brief This method get an reference on the current SQL instance when PHP deserialize a Temple object.
+     */
+    public function __wakeup()
+    {
+        $this->_SQL = SQL::getInstance();
+    }
 
     public function getId()
     {
