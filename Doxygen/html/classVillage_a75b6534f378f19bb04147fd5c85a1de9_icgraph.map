@@ -1,0 +1,4 @@
+<map id="Village\getTemple" name="Village\getTemple">
+<area shape="rect" id="node2" href="$classVillage.html#a1cedfa6d0cc4f8c432265c5b8309f931" title="This method load the data about all the Member Village : " alt="" coords="192,13,411,39"/>
+<area shape="rect" id="node3" href="$classMember.html#a9624c3631bc10fbc592380353e537928" title="This method load all data about this Member to store them in SESSION. " alt="" coords="459,5,681,47"/>
+</map>

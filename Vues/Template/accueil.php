@@ -30,7 +30,7 @@ else
         echo $_LANGUAGE['FR']['RESUME_VILLAGES'];
         echo '<ul>';
         
-        foreach($membre->getVillages() as $village)
+        foreach($_SESSION['data']->getVillages() as $village)
             echo '<li>' . $village->getName() . '</li>';
 
         echo '</ul><br />';

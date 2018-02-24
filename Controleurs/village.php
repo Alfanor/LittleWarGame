@@ -8,15 +8,16 @@ if(isset($_SESSION['id']))
 
     $titre = 'Village';
 
-    $erreur = false;
-
-    $membre = new Member($_SQL, $_SESSION['id']);
-
-    // On récupère les données du vilage
-    $village = new Village($_SQL, $_GET['id']);
+    $village = false;
     
-    if(!$village->loadFromId())
-        $erreur = true;
+    // We have to know if the village ID exist
+    foreach($_SESSION['data']->getVillages() as $v) {
+        if($v->getId() == $_GET['id']) {
+            $village = $v;
+
+            break;
+        }
+    }
 
     $donnees = ob_start();
 

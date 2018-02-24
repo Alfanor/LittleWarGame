@@ -1,0 +1,132 @@
+\hypertarget{classInventory}{}\section{Inventory Class Reference}
+\label{classInventory}\index{Inventory@{Inventory}}
+
+
+This class store all Ressources belonging to another object like a \mbox{\hyperlink{classTemple}{Temple}} or a \mbox{\hyperlink{classVillage}{Village}}.  
+
+
+
+
+Collaboration diagram for Inventory\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=186pt]{classInventory__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classInventory_ad590054ec1e295007c7a7f14ecd12ac5}{\+\_\+\+\_\+construct}} (\$id)
+\begin{DoxyCompactList}\small\item\em Constructor for the class \mbox{\hyperlink{classInventory}{Inventory}}. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classInventory_ad5fa182aefcd1e26ae373b70bd23a7a5}{load\+From\+Id}} ()
+\begin{DoxyCompactList}\small\item\em This method load the ressources of this inventory based on the id attribute. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classInventory_af7c8af72b921f5d7ba545d62378b113b}{\+\_\+\+\_\+sleep}} ()
+\begin{DoxyCompactList}\small\item\em This method define the fields to save when we ask P\+HP for serialize a \mbox{\hyperlink{classInventory}{Inventory}} object. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classInventory_ada9aa6a6e88be3d5fce6b318e459664d}\label{classInventory_ada9aa6a6e88be3d5fce6b318e459664d}} 
+\mbox{\hyperlink{classInventory_ada9aa6a6e88be3d5fce6b318e459664d}{\+\_\+\+\_\+wakeup}} ()
+\begin{DoxyCompactList}\small\item\em This method get an reference on the current \mbox{\hyperlink{classSQL}{S\+QL}} instance when P\+HP deserialize a \mbox{\hyperlink{classInventory}{Inventory}} object. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classInventory_ae571fc67c0f3bb9582de755f624ba680}{get\+Id}} ()
+\begin{DoxyCompactList}\small\item\em Getter for \mbox{\hyperlink{classInventory}{Inventory}} ID. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classInventory_a9b570bb7650509c786bc066347229979}{get\+Ressources}} ()
+\begin{DoxyCompactList}\small\item\em Getter for \mbox{\hyperlink{classInventory}{Inventory}} Ressources list. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classInventory_a938439393bff41626879c81b27fa3eb1}\label{classInventory_a938439393bff41626879c81b27fa3eb1}} 
+\mbox{\hyperlink{classInventory_a938439393bff41626879c81b27fa3eb1}{\$id}}
+\begin{DoxyCompactList}\small\item\em The \mbox{\hyperlink{classInventory}{Inventory}} ID. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classInventory_ae2de638a5d5b2175cea1327dd6a1097d}\label{classInventory_ae2de638a5d5b2175cea1327dd6a1097d}} 
+\mbox{\hyperlink{classInventory_ae2de638a5d5b2175cea1327dd6a1097d}{\$ressources}} = array()
+\begin{DoxyCompactList}\small\item\em The Ressources list in this inventory. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classInventory_a7097eb9666f0d9e70ef7d0b1ef770cb5}\label{classInventory_a7097eb9666f0d9e70ef7d0b1ef770cb5}} 
+\mbox{\hyperlink{classInventory_a7097eb9666f0d9e70ef7d0b1ef770cb5}{\$\+\_\+\+S\+QL}}
+\begin{DoxyCompactList}\small\item\em Reference on the \mbox{\hyperlink{classSQL}{S\+QL}} connexion. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+This class store all Ressources belonging to another object like a \mbox{\hyperlink{classTemple}{Temple}} or a \mbox{\hyperlink{classVillage}{Village}}. 
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classInventory_ad590054ec1e295007c7a7f14ecd12ac5}\label{classInventory_ad590054ec1e295007c7a7f14ecd12ac5}} 
+\index{Inventory@{Inventory}!\+\_\+\+\_\+construct@{\+\_\+\+\_\+construct}}
+\index{\+\_\+\+\_\+construct@{\+\_\+\+\_\+construct}!Inventory@{Inventory}}
+\subsubsection{\texorpdfstring{\+\_\+\+\_\+construct()}{\_\_construct()}}
+{\footnotesize\ttfamily Inventory\+::\+\_\+\+\_\+construct (\begin{DoxyParamCaption}\item[{}]{\$id }\end{DoxyParamCaption})}
+
+
+
+Constructor for the class \mbox{\hyperlink{classInventory}{Inventory}}. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em \$id} & the \mbox{\hyperlink{classInventory}{Inventory}} ID \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+returns the initialized \mbox{\hyperlink{classInventory}{Inventory}} object 
+\end{DoxyReturn}
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classInventory_af7c8af72b921f5d7ba545d62378b113b}\label{classInventory_af7c8af72b921f5d7ba545d62378b113b}} 
+\index{Inventory@{Inventory}!\+\_\+\+\_\+sleep@{\+\_\+\+\_\+sleep}}
+\index{\+\_\+\+\_\+sleep@{\+\_\+\+\_\+sleep}!Inventory@{Inventory}}
+\subsubsection{\texorpdfstring{\+\_\+\+\_\+sleep()}{\_\_sleep()}}
+{\footnotesize\ttfamily Inventory\+::\+\_\+\+\_\+sleep (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+This method define the fields to save when we ask P\+HP for serialize a \mbox{\hyperlink{classInventory}{Inventory}} object. 
+
+\begin{DoxyReturn}{Returns}
+returns the list of attribute to save 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classInventory_ae571fc67c0f3bb9582de755f624ba680}\label{classInventory_ae571fc67c0f3bb9582de755f624ba680}} 
+\index{Inventory@{Inventory}!get\+Id@{get\+Id}}
+\index{get\+Id@{get\+Id}!Inventory@{Inventory}}
+\subsubsection{\texorpdfstring{get\+Id()}{getId()}}
+{\footnotesize\ttfamily Inventory\+::get\+Id (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Getter for \mbox{\hyperlink{classInventory}{Inventory}} ID. 
+
+\begin{DoxyReturn}{Returns}
+returns the \mbox{\hyperlink{classInventory}{Inventory}} ID 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classInventory_a9b570bb7650509c786bc066347229979}\label{classInventory_a9b570bb7650509c786bc066347229979}} 
+\index{Inventory@{Inventory}!get\+Ressources@{get\+Ressources}}
+\index{get\+Ressources@{get\+Ressources}!Inventory@{Inventory}}
+\subsubsection{\texorpdfstring{get\+Ressources()}{getRessources()}}
+{\footnotesize\ttfamily Inventory\+::get\+Ressources (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Getter for \mbox{\hyperlink{classInventory}{Inventory}} Ressources list. 
+
+\begin{DoxyReturn}{Returns}
+returns the \mbox{\hyperlink{classInventory}{Inventory}} Ressources list 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classInventory_ad5fa182aefcd1e26ae373b70bd23a7a5}\label{classInventory_ad5fa182aefcd1e26ae373b70bd23a7a5}} 
+\index{Inventory@{Inventory}!load\+From\+Id@{load\+From\+Id}}
+\index{load\+From\+Id@{load\+From\+Id}!Inventory@{Inventory}}
+\subsubsection{\texorpdfstring{load\+From\+Id()}{loadFromId()}}
+{\footnotesize\ttfamily Inventory\+::load\+From\+Id (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+This method load the ressources of this inventory based on the id attribute. 
+
+\begin{DoxyReturn}{Returns}
+returns true if it\textquotesingle{}s succeed 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+Classes/Inventory.\+php\end{DoxyCompactItemize}

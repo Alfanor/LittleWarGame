@@ -1,20 +1,36 @@
 <?php
+/**
+ * @class Village Class
+ * @brief This class is the core of the game because all other objects are link to it.
+ */
 class Village
 {
-    protected $id;    
-    protected $name;
-    protected $member;
-    protected $inventory;
-    protected $temple;
+    protected $id; //!<@brief The Village ID    
+    protected $name; //!<@brief The Village name
+    protected $member; //!<@brief The Member who own this Village
+    protected $inventory; //!<@brief The Inventory of this Village
+    protected $temple; //!<@brief The Temple of this village (if there is one)
 
-    private $_SQL;
+    private $_SQL; //!<@brief Reference on the SQL connexion
 
-    public function __construct(&$_SQL, $id)
+    /**
+     *  @brief Constructor for the class Village.
+     *  @param $id the Village ID
+     *  @return returns the initialized Village object
+     */
+    public function __construct($id)
     {
-        $this->_SQL = $_SQL;
+        $this->_SQL = SQL::getInstance();
         $this->id = $id;
     }
 
+    /**
+     *  @brief This method load the data about this Village :
+     *          - Workers in the Village
+     *          - Temple in the Village
+     *          - Buildings in the Village
+     *  @return returns true if it's succeed, false in the other case
+     */
     public function loadFromId()
     {
         $req = 'SELECT  v.id as v_id, 
@@ -58,32 +74,19 @@ class Village
 
         return false;
     }
-    
-    public static function loadMenuListFromMemberId(&$_SQL, $id)
+
+    /**
+     *  @brief This method load the data about all the Member Village :
+     *          - Workers in the Village
+     *          - Temple in the Village
+     *          - Buildings in the Village
+     *  @param id the Member ID
+     *  @return returns a list of Village if it's succeed, false in the other case
+     */
+    public static function loadListFromMemberId($id)
     {
-        $req = 'SELECT id, name FROM village WHERE member_id = :id';
+        $_SQL = SQL::getInstance();
 
-        $rep = $_SQL->prepare($req);
-        
-        $rep->execute(array(':id' => $id));
-        
-        $resultat = $rep->fetchAll();
-
-        if(count($resultat) > 0)
-        {
-            $villages = array();
-
-            foreach($resultat as $village)
-                $villages[$village['id']] = $village['name'];
-
-            return $villages;
-        }
-
-        return false;
-    }
-
-    public static function loadListFromMemberId(&$_SQL, $id)
-    {
         $req = 'SELECT  v.id as v_id, 
                         v.name as v_name, 
                         v.member_id, 
@@ -110,12 +113,12 @@ class Village
             foreach($resultat as $village)
             {
                 // We store basics data
-                $villages[$i] = new Village($_SQL, $village['v_id']);
+                $villages[$i] = new Village($village['v_id']);
 
                 $villages[$i]->setName($village['v_name']);
 
                 // We want all ressources
-                $villages[$i]->setInventory(new Inventory($_SQL, $village['v_inventory']));
+                $villages[$i]->setInventory(new Inventory($village['v_inventory']));
                 $villages[$i]->getInventory()->loadFromId();
 
                 // And we want to load the temple if is in this village
@@ -124,11 +127,11 @@ class Village
                 {
                     $_SESSION['temple'] = true;
 
-                    $villages[$i]->setTemple(new Temple($_SQL, $village['t_id']));
+                    $villages[$i]->setTemple(new Temple($village['t_id']));
                     
                     $villages[$i]->getTemple()->setName($village['t_name']);
                     $villages[$i]->getTemple()->setLevel($village['t_level']);
-                    $villages[$i]->getTemple()->setInventory(new Inventory($_SQL, $village['t_inventory']));
+                    $villages[$i]->getTemple()->setInventory(new Inventory($village['t_inventory']));
         
                     if(!$villages[$i]->getTemple()->GetInventory()->loadFromId())
                         return false;
@@ -143,36 +146,78 @@ class Village
         return false;    
     }
 
+    /**
+     *  @brief This method define the fields to save when we ask PHP for serialize a Village object.
+     *  @return returns the list of attribute to save
+     */
+    public function __sleep()
+    {
+        return array('id', 'name', 'member', 'inventory', 'temple');
+    }
+
+    /**
+     *  @brief This method get an reference on the current SQL instance when PHP deserialize a Village object.
+     */
+    public function __wakeup()
+    {
+        $this->_SQL = SQL::getInstance();
+    }
+
+    /**
+     *  @brief Getter for Village ID.
+     *  @return returns the Village ID
+     */
     public function getId()
     {
         return $this->id;
     }
 
+    /**
+     *  @brief Getter for Village name.
+     *  @return returns the Village name
+     */
     public function getName()
     {
         return $this->name;
     }
 
+    /**
+     *  @brief Getter for Village Inventory.
+     *  @return returns the Village Inventory
+     */
     public function getInventory()
     {
         return $this->inventory;
     }
 
+    /**
+     *  @brief Getter for Village Temple.
+     *  @return returns the Village Temple
+     */
     public function getTemple()
     {
         return $this->temple;
     }
 
+    /**
+     *  @brief Setter for Village name.
+     */
     public function setName($name)
     {
         $this->name = $name;
     }
 
+    /**
+     *  @brief Setter for Village Inventory.
+     */
     public function setInventory($inventory)
     {
         $this->inventory = $inventory;
     }
 
+    /**
+     *  @brief Setter for Village Temple.
+     */
     public function setTemple($temple)
     {
         $this->temple = $temple;
