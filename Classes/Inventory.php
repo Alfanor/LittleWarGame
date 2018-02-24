@@ -23,26 +23,36 @@ class Inventory
 
     /**
      *  @brief This method load the ressources of this inventory based on the id attribute.
-     *  @return returns true if it's succeed
+     *  @return returns true if it's succeed, false on the other case
      */
     public function loadFromId()
     {
-        // Select all the ressources for this inventory
-        $req = 'SELECT ressource_id, amount FROM inventory_ressource WHERE inventory_id = :id';
-    
-        $rep = $this->_SQL->prepare($req);
-        
+        // We have to be sure that this Inventory exist
+        $req = 'SELECT COUNT(id) as is_exist FROM inventory WHERE id = :id';
+        $rep = $this->_SQL->prepare($req); 
+       
         $rep->execute(array(':id' => $this->id));
-        
         $resultat = $rep->fetchAll();
+    
+        if($resultat[0]['is_exist'] > 0)
+        {  
+            // Select all the ressources for this Inventory
+            $req = 'SELECT ressource_id, amount FROM inventory_ressource WHERE inventory_id = :id';    
+            $rep = $this->_SQL->prepare($req);
+            
+            $rep->execute(array(':id' => $this->id));        
+            $resultat = $rep->fetchAll();
 
-        if(count($resultat) > 0)
-        {
-            foreach($resultat as $ressource)
-                $this->ressources[$ressource['ressource_id']] = $ressource['amount'];
+            if(count($resultat) > 0)
+            {
+                foreach($resultat as $ressource)
+                    $this->ressources[$ressource['ressource_id']] = $ressource['amount'];
+            }
+
+            return true;
         }
 
-        return true; 
+        return false; 
     }
 
     /**
