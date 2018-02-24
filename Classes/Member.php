@@ -1,41 +1,27 @@
 <?php
-/**
- * @class Member Class
- * @brief This class is the core of the projet because it store all informations about villages, 
- * so all informations about the member.
- */
 class Member {
-    protected $id; //!<@brief The Member ID
-    protected $login; //!<@brief The Member login
-    protected $password; //!<@brief The Member password (hash)
+    protected $id;
+    protected $login;
+    protected $password;
 
-    protected $villages; //!<@brief List of Village object
+    protected $villages;
 
-    private $_SQL; //!<@brief Reference on the SQL connexion
+    private $_SQL;
 
-    /**
-     *  @brief Constructor for the class Member.
-     *  @param $id the Member ID
-     *  @return returns the initialized Member object
-     */
-    public function __construct($id)
+    public function __construct(&$_SQL, $id)
     {
-        $this->_SQL = SQL::getInstance();
+        $this->_SQL = $_SQL;
         $this->id = $id;
     }
 
-    /**
-     *  @brief This method load all data about this Member to store them in SESSION.
-     *      - Village list
-     *          - Workers in the Village
-     *          - Temple in the Village
-     *          - Buildings in the Village
-     *  @return returns true if it's succeed, false in the other case
-     */
     public function loadAccountDataFromMemberId()
     {
-        // Select all villages is like select all Member data
-        $this->villages = Village::loadListFromMemberId($this->id);
+        // We don't care bout member data, $_SESSION already store them
+        // So, here, member id is already checked
+
+        // We need to find member village
+        // TODO : When a member have several villages, it's important to select only the one with the temple
+        $this->villages = Village::loadListFromMemberId($this->_SQL, $this->id);
 
         if(is_array($this->villages))
             return true;
@@ -43,45 +29,16 @@ class Member {
         return false;  
     }
 
-    /**
-     *  @brief This method define the fields to save when we ask PHP for serialize a Member object.
-     *  @return returns the list of attribute to save
-     */
-    public function __sleep()
-    {
-        return array('id', 'login', 'villages');
-    }
-
-    /**
-     *  @brief This method get an reference on the current SQL instance when PHP deserialize a Member object.
-     */
-    public function __wakeup()
-    {
-        $this->_SQL = SQL::getInstance();
-    }
-    
-    /**
-     *  @brief Getter for Member ID.
-     *  @return returns the Member ID
-     */
     public function getId()
     {
         return $this->id;
     }
 
-    /**
-     *  @brief Getter for Member Login.
-     *  @return returns the Member Login
-     */
     public function getLogin()
     {
         return $this->login;
     }
 
-    /**
-     *  @brief Getter for Member Village list.
-     *  @return returns the Member Village list
-     */
     public function getVillages()
     {
         return $this->villages;

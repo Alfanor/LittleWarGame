@@ -1,14 +1,6 @@
 <?php
-/**
- *  @file
- *  @brief This script job is te find if the member exist and store all data about it
- *  in SESSION to limit the amount of needed SQL request on each page (0 until the 
- *  member ask for some modifications)
- */
 if(!empty($_POST['login']) && !empty($_POST['password']))
 {
-    $_SQL = SQL::getInstance();
-
     $req = 'SELECT id, login, password FROM member WHERE login = :login';
     
     $rep = $_SQL->prepare($req);
@@ -21,24 +13,21 @@ if(!empty($_POST['login']) && !empty($_POST['password']))
     {
         if(password_verify($_POST['password'], $resultat[0]['password']))
         {
-            // We can store some specific data in SESSION to access it easily
+            $_SESSION['login'] = $resultat[0]['login'];
             $_SESSION['id'] = $resultat[0]['id'];
+ 
+            // Au passage on va récupérer les villages du membre pour les stocker en session
+            // et pouvoir les afficher dans le menu sans devoir recharger les informations à chaque page
+            $villages = Village::loadMenuListFromMemberId($_SQL, $_SESSION['id']);
 
-            // Load all member data
-            // It's supposed to be the only SQL job until the member ask for an action
-            // other than just show some data
-            $member = new Member($_SESSION['id']);
-            $member->loadAccountDataFromMemberId();
-
-            // It's not possible to have no village
-            if(count($member->getVillages()) == 0)
+            // Il est impossible de ne pas avoir de village
+            if($villages === false)
             {
                 header('Location : index.php?p=deconnexion');
             }
-    
-            // Store the object in SESSION
-            $_SESSION['data'] = $member;
 
+            $_SESSION['villages'] = $villages;
+            
             header('Location: index.php');
             
             exit();
