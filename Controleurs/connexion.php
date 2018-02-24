@@ -31,9 +31,9 @@ if(!empty($_POST['login']) && !empty($_POST['password']))
             $member->loadAccountDataFromMemberId();
 
             // It's not possible to have no village
-            if(count($member->getVillages()) == 0)
+            if(!is_array($member->getVillages()))
             {
-                header('Location : index.php?p=deconnexion');
+                header('Location: index.php?p=deconnexion');
             }
     
             // Store the object in SESSION

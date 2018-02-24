@@ -8,6 +8,8 @@ class Village
     protected $id; //!<@brief The Village ID    
     protected $name; //!<@brief The Village name
     protected $member; //!<@brief The Member who own this Village
+    protected $area; //!<@brief The Area the Village belong to
+    protected $area_ressource; //!<@brief The AreaRessource list on the Village Area
     protected $inventory; //!<@brief The Inventory of this Village
     protected $temple; //!<@brief The Temple of this village (if there is one)
 
@@ -33,9 +35,10 @@ class Village
      */
     public function loadFromId()
     {
-        $req = 'SELECT  v.id as v_id, 
-                        v.name as v_name, 
+        $req = 'SELECT  v.id as v_id,  
+                        v.area_id,                       
                         v.member_id, 
+                        v.name as v_name, 
                         v.inventory_id as v_inventory, 
                         t.id as t_id, 
                         t.name as t_name, 
@@ -53,17 +56,26 @@ class Village
 
         if(count($resultat) == 1)
         {
+            // Village Inventory
             $this->name = $resultat[0]['v_name'];
-            $this->inventory = new Inventory($this->_SQL, $resultat[0]['v_inventory']);
+            $this->inventory = new Inventory($resultat[0]['v_inventory']);
             $this->inventory->loadFromId();
 
+            // Village Area informations
+            $this->area = new Area($resultat[0]['area_id']);
+            $this->area->loadFromId();
+
+            // Village AreaRessource informations
+            $this->AreaRessource = AreaRessource::loadListFromVillageAreaId($this->area->getId());
+
+            // If there is a Temple in this village
             if(isset($resultat[0]['t_id']))
             {
-                $this->temple = new Temple($this->_SQL, $resultat[0]['t_id']);
+                $this->temple = new Temple($resultat[0]['t_id']);
                     
                 $this->temple->setName($resultat[0]['t_name']);
                 $this->temple->setLevel($resultat[0]['t_level']);
-                $this->temple->setInventory(new Inventory($this->_SQL, $resultat[0]['t_inventory']));
+                $this->temple->setInventory(new Inventory($resultat[0]['t_inventory']));
     
                 if(!$this->temple->GetInventory()->loadFromId())
                     return false;
@@ -87,9 +99,10 @@ class Village
     {
         $_SQL = SQL::getInstance();
 
-        $req = 'SELECT  v.id as v_id, 
-                        v.name as v_name, 
+        $req = 'SELECT  v.id as v_id,  
+                        v.area_id,                       
                         v.member_id, 
+                        v.name as v_name,
                         v.inventory_id as v_inventory, 
                         t.id as t_id, 
                         t.name as t_name, 
@@ -114,12 +127,18 @@ class Village
             {
                 // We store basics data
                 $villages[$i] = new Village($village['v_id']);
-
                 $villages[$i]->setName($village['v_name']);
 
                 // We want all ressources
                 $villages[$i]->setInventory(new Inventory($village['v_inventory']));
                 $villages[$i]->getInventory()->loadFromId();
+
+                // Village Area informations
+                $villages[$i]->setArea(new Area($village['area_id']));
+                $villages[$i]->getArea()->loadFromId();
+
+                // Village AreaRessource informations
+                $villages[$i]->setAreaRessource(AreaRessource::loadListFromVillageAreaId($villages[$i]->getArea()->getId()));
 
                 // And we want to load the temple if is in this village
                 // If there is village with temple, it's always the first
@@ -152,7 +171,7 @@ class Village
      */
     public function __sleep()
     {
-        return array('id', 'name', 'member', 'inventory', 'temple');
+        return array('id', 'name', 'member', 'area', 'area_ressource', 'inventory', 'temple');
     }
 
     /**
@@ -182,6 +201,24 @@ class Village
     }
 
     /**
+     *  @brief Getter for Village Area.
+     *  @return returns the Village Area
+     */
+    public function getArea()
+    {
+        return $this->area;
+    }
+
+    /**
+     *  @brief Getter for Village AreaRessource list.
+     *  @return returns the Village AreaRessource list
+     */
+    public function getAreaRessource()
+    {
+        return $this->area_ressource;
+    }
+
+    /**
      *  @brief Getter for Village Inventory.
      *  @return returns the Village Inventory
      */
@@ -205,6 +242,22 @@ class Village
     public function setName($name)
     {
         $this->name = $name;
+    }
+
+    /**
+     *  @brief Setter for Village Area.
+     */
+    public function setArea($area)
+    {
+        $this->area = $area;
+    }
+
+    /**
+     *  @brief Setter for Village AreaRessource list.
+     */
+    public function setAreaRessource($area_ressource)
+    {
+        $this->area_ressource = $area_ressource;
     }
 
     /**
