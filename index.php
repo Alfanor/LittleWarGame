@@ -1,4 +1,6 @@
 <?php
+$start = microtime(true);
+
 error_reporting(E_ALL);
 
 ini_set("display_errors", 1);
@@ -11,6 +13,7 @@ session_start();
 
 require_once('Configuration/Page.php');
 require_once('Vues/Langage/FR/menu.php');
+require_once('Vues/Langage/FR/footer.php');
 
 $_CSS = array();
 $_JS = array();
@@ -31,4 +34,8 @@ else
 {
     require_once('Controleurs/accueil.php');
 }
+
+$end = microtime(true);
+
+require_once('Vues/Template/footer.php');
 ?>

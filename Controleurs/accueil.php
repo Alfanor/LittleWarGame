@@ -40,7 +40,6 @@ $donnees = ob_start();
 
 require_once('Vues/Template/header.php');
 require_once('Vues/Template/accueil.php');
-require_once('Vues/Template/footer.php');
 
 ob_end_flush();
 ?>

@@ -23,7 +23,6 @@ if(isset($_SESSION['id']))
 
     require_once('Vues/Template/header.php');
     require_once('Vues/Template/village.php');
-    require_once('Vues/Template/footer.php');
 
     ob_end_flush();
 }
