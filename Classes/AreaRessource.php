@@ -3,8 +3,8 @@ class AreaRessource
 {
     protected $id; //!<@brief The AreaRessource ID    
     protected $area; //!<@brief The Area this AreaRessource belong to
-    protected $ressource; //!<@brief The Ressource on this AreaRessource
-    protected $village; //!<@brief The Village this AreaRessource belong to
+    protected $ressource_id; //!<@brief The Ressource ID on this AreaRessource
+    protected $id_village; //!<@brief The Village this AreaRessource belong to
     protected $worker; //!<@brief The number of workers on this AreaRessource
 
     private $_SQL; //!<@brief Reference on the SQL connexion
@@ -51,7 +51,7 @@ class AreaRessource
             foreach($resultat as $ar)
             {
                 $area_ressources[$i] = new AreaRessource($ar['id']);
-                $area_ressources[$i]->setRessource($ar['ressource_id']);
+                $area_ressources[$i]->setRessourceId($ar['ressource_id']);
                 $area_ressources[$i]->setWorker((!isset($ar['worker']) ? 0 : $ar['worker']));
 
                 ++$i;
@@ -63,13 +63,75 @@ class AreaRessource
         return false;    
     }
 
+    public static function updateAreaRessourceWorkerListOnVillage($new_ar, $old_ar, $village)
+    {
+        // We have to be sure that the modification are possibles
+        $number_workers = 0;
+
+        foreach($new_ar as $ar)
+        {
+            if($ar->getWorker() < 0)
+                return false;
+
+            $number_workers += $ar->getWorker();
+        }
+
+        foreach($old_ar as $ar)
+        {
+            $number_workers += $ar->getWorker();
+        }
+
+        if($number_workers > $village->getPopulation())
+            return false;
+
+        $_SQL = SQL::getInstance();
+
+        // If we have enough population and nothing lesser than 0, it's ok
+        $req = 'INSERT INTO village_farmer(village_id, area_ressource_id, worker) VALUES ';
+
+        foreach($new_ar as $ar)
+        {
+            if($ar != end($new_ar))
+                $req .= '(' . $village->getId() . ', ' . $ar->getId() . ', ' . $ar->getWorker() . '),';
+
+            else
+                $req .= '(' . $village->getId() . ', ' . $ar->getId() . ', ' . $ar->getWorker() . ')' ;
+        }
+
+        $req .= ' ON DUPLICATE KEY UPDATE worker = VALUES(worker)';
+
+        $rep = $_SQL->prepare($req);
+
+        $rep->execute();
+
+        if($rep->rowCount() == (count($new_ar) * 2))
+        {
+            // We have to modify SESSION values
+            foreach($_SESSION['data']->getVillages() as &$v)
+            {
+                if($v->getId() == $village->getId())
+                {
+                    foreach($v->getAreaRessource() as &$ar)
+                    {
+                        if(isset($new_ar[$ar->getId()]))
+                            $ar->setWorker($new_ar[$ar->getId()]->getWorker());
+                    }
+                }
+            }
+
+            return true;
+        }
+
+        return false;
+    }
+
     /**
      *  @brief This method define the fields to save when we ask PHP for serialize a AreaRessource object.
      *  @return returns the list of attribute to save
      */
     public function __sleep()
     {
-        return array('id', 'ressource', 'worker');
+        return array('id', 'ressource_id', 'worker');
     }
 
     /**
@@ -90,12 +152,12 @@ class AreaRessource
     }
 
     /**
-     *  @brief Getter for AreaRessource ressource.
-     *  @return returns the AreaResource ressource
+     *  @brief Getter for AreaRessource ressource ID.
+     *  @return returns the AreaResource ressource ID
      */
-    public function getRessource()
+    public function getRessourceID()
     {
-        return $this->ressource;
+        return $this->ressource_id;
     }
 
     /**
@@ -118,9 +180,9 @@ class AreaRessource
     /**
      *  @brief Setter for AreaRessource ressource.
      */
-    public function setRessource($ressource)
+    public function setRessourceID($ressource_id)
     {
-        $this->ressource = $ressource;
+        $this->ressource_id = $ressource_id;
     }
 
     /**
