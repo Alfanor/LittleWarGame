@@ -3,6 +3,8 @@ if(isset($_SESSION['id']) && ($village !== false))
 {
     echo sprintf($_LANGUAGE['FR']['VILLAGE_RESUME'], $village->getName() . ' (' . $village->getArea()->getX() . ' | ' . $village->getArea()->getY() . ')');
 
+    echo '<br /><br />' . $_LANGUAGE['FR']['VILLAGE_POPULATION'] . ' ' . $village->getPopulation();
+
     echo '<br /><br />' . $_LANGUAGE['FR']['VILLAGE_AREA'];
 
     echo '<ul>';

@@ -7,6 +7,7 @@ class Village
 {
     protected $id; //!<@brief The Village ID    
     protected $name; //!<@brief The Village name
+    protected $population; //!<@brief The Village population
     protected $member; //!<@brief The Member who own this Village
     protected $area; //!<@brief The Area the Village belong to
     protected $area_ressource; //!<@brief The AreaRessource list on the Village Area
@@ -38,7 +39,8 @@ class Village
         $req = 'SELECT  v.id as v_id,  
                         v.area_id,                       
                         v.member_id, 
-                        v.name as v_name, 
+                        v.name as v_name,
+                        v.population, 
                         v.inventory_id as v_inventory, 
                         t.id as t_id, 
                         t.name as t_name, 
@@ -56,8 +58,11 @@ class Village
 
         if(count($resultat) == 1)
         {
-            // Village Inventory
+            // Village globals informations
             $this->name = $resultat[0]['v_name'];
+            $this->population = $resultat[0]['population'];
+
+            // Village Inventory
             $this->inventory = new Inventory($resultat[0]['v_inventory']);
             $this->inventory->loadFromId();
 
@@ -103,6 +108,7 @@ class Village
                         v.area_id,                       
                         v.member_id, 
                         v.name as v_name,
+                        v.population,
                         v.inventory_id as v_inventory, 
                         t.id as t_id, 
                         t.name as t_name, 
@@ -128,6 +134,7 @@ class Village
                 // We store basics data
                 $villages[$i] = new Village($village['v_id']);
                 $villages[$i]->setName($village['v_name']);
+                $villages[$i]->setPopulation($village['population']);
 
                 // We want all ressources
                 $villages[$i]->setInventory(new Inventory($village['v_inventory']));
@@ -171,7 +178,7 @@ class Village
      */
     public function __sleep()
     {
-        return array('id', 'name', 'member', 'area', 'area_ressource', 'inventory', 'temple');
+        return array('id', 'name', 'population', 'member', 'area', 'area_ressource', 'inventory', 'temple');
     }
 
     /**
@@ -198,6 +205,15 @@ class Village
     public function getName()
     {
         return $this->name;
+    }
+
+    /**
+     *  @brief Getter for Village population.
+     *  @return returns the Village population
+     */
+    public function getPopulation()
+    {
+        return $this->population;
     }
 
     /**
@@ -242,6 +258,14 @@ class Village
     public function setName($name)
     {
         $this->name = $name;
+    }
+
+    /**
+     *  @brief Setter for Village population.
+     */
+    public function setPopulation($population)
+    {
+        $this->population = $population;
     }
 
     /**
