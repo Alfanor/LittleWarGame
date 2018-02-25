@@ -63,6 +63,13 @@ class AreaRessource
         return false;    
     }
 
+    /**
+     *  @brief This method update one or many AreaRessources number worker for one Village
+     *  @param new_ar the updated AreaRessource with new values
+     *  @param old_ar the non-updated AreaRessource with old value
+     *  @param village the village the AreaRessource belong to
+     *  @return returns true if it's succeed, false in the other case
+     */
     public static function updateAreaRessourceWorkerListOnVillage($new_ar, $old_ar, $village)
     {
         // We have to be sure that the modification are possibles

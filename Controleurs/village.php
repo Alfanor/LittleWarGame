@@ -58,6 +58,13 @@ if(isset($_SESSION['id']))
             // Now we have the data to check and save
             if(!AreaRessource::updateAreaRessourceWorkerListOnVillage($new_ar, $old_ar, $village))
                 $error['action_1'] = true;
+
+            else
+            {
+                header('Location: index.php?p=village&id=' . $village->getId());
+
+                exit;
+            }
         }
     }
 
