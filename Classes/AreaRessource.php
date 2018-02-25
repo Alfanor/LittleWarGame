@@ -111,7 +111,7 @@ class AreaRessource
 
         $rep->execute();
 
-        if($rep->rowCount() == (count($new_ar) * 2))
+        if($rep->rowCount() > 0)
         {
             // We have to modify SESSION values
             foreach($_SESSION['data']->getVillages() as &$v)
