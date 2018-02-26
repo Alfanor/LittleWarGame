@@ -42,12 +42,19 @@ class Inventory
         $rep = $this->_SQL->prepare($req); 
        
         $rep->execute(array(':id' => $this->id));
-        $resultat = $rep->fetchAll();
+        $results = $rep->fetchAll();
     
         // If there is no result, the inventory not exist
-        if(count($resultat) > 0)
+        if(count($results) > 0)
         {
-            foreach($resultat as $ressource)
+            // Maybe the inventory exist but there is no ressource in
+            if(count($results) == 1)
+            {
+                if(is_null($results[0]['ressource_id']))
+                    return true;
+            }
+            
+            foreach($results as $ressource)
                 $this->ressources[$ressource['ressource_id']] = $ressource['amount'];               
 
             return true;

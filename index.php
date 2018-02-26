@@ -20,13 +20,35 @@ $_JS = array();
 
 (!empty($_GET['p'])) ? ($page_demandee = $_GET['p']) : ($page_demandee = null);
 
-if(in_array($page_demandee, $public_pages))
+if(!isset($_SESSION['id']) && in_array($page_demandee, $public_pages))
 {
     require_once('Controleurs/' . $page_demandee . '.php');
 }
 
 else if(!empty($_SESSION['id']) && in_array($page_demandee, $member_pages))
 {
+    // First, we have to update SESSION data if it's necessary
+    $round_number = Round::getRoundNumber();
+
+    if($_SESSION['last_round_update'] != $round_number)
+    {
+        $member = new Member($_SESSION['id']);
+        $member->loadAccountDataFromMemberId();
+
+        // It's not possible to have no village
+        if(!is_array($member->getVillages()))
+        {
+            header('Location: index.php?p=deconnexion');
+        }
+
+        // Store the object in SESSION
+        $_SESSION['data'] = $member;
+
+        // We want to know if a new round is generate when the member 
+        // is connected to update his session data
+        $_SESSION['last_round_update'] = $round_number;
+    }
+
     require_once('Controleurs/' . $page_demandee . '.php');
 }
 

@@ -45,7 +45,7 @@
                   <li><a href="?p=temple"><?php echo $_LANGUAGE['FR']['MENU_TEMPLE']; ?></a></li>
                </ul>
 
-               <span class="right"><?php echo $_LANGUAGE['FR']['MENU_TOUR'] . Round::getRoundNumber(); ?></span>
+               <span class="right"><?php echo $_LANGUAGE['FR']['MENU_TOUR'] . $round_number; ?></span>
             </div>
          <?php
          }

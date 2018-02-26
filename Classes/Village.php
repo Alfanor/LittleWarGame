@@ -92,6 +92,11 @@ class Village
         return false;
     }
 
+    public function addAreaRessource($ar)
+    {
+        $this->area_ressource[$ar->getId()] = $ar;
+    }
+
     /**
      *  @brief This method load the data about all the Member Village :
      *          - Workers in the Village
@@ -171,6 +176,54 @@ class Village
 
         return false;    
     }
+
+    /**
+     *  @brief This method load usefull data about all Villages on the server
+     *  to generate a new round.
+     *  @return returns a list of Village if it's succeed, false in the other case
+     */
+    public static function selectVillagesDataForRoundGeneration()
+    {
+        $_SQL = SQL::getInstance();
+
+        // If there is 0 worker on an area, is useless to select it :)
+        $req = 'SELECT  ar.id AS ar_id,
+                        ar.ressource_id,
+                        vf.worker,
+                        v.id AS v_id, 
+                        v.inventory_id AS inv_id
+                FROM area_ressource ar
+                LEFT JOIN village_farmer vf ON vf.area_ressource_id = ar.id
+                LEFT JOIN village v ON vf.village_id = v.id
+                WHERE vf.worker > 0';
+
+        $results = $_SQL->query($req);
+        
+        if($results->rowCount() > 0)
+        {
+            $villages = array();
+
+            foreach($results as $ar)
+            {
+                if(!isset($villages[$ar['v_id']]))
+                {
+                    $villages[$ar['v_id']] = new Village($ar['v_id']);
+                    $villages[$ar['v_id']]->setInventory(new Inventory($ar['inv_id']));
+                }
+
+                $new_ar = new AreaRessource($ar['ar_id']);
+                $new_ar->setRessourceId($ar['ressource_id']);
+                $new_ar->setVillageId($ar['v_id']);
+                $new_ar->setWorker($ar['worker']);
+                
+                $villages[$ar['v_id']]->addAreaRessource($new_ar); 
+            }
+
+            return $villages;
+        }
+
+        return false; 
+    }    
 
     /**
      *  @brief This method define the fields to save when we ask PHP for serialize a Village object.

@@ -39,7 +39,11 @@ if(!empty($_POST['login']) && !empty($_POST['password']))
             // Store the object in SESSION
             $_SESSION['data'] = $member;
 
-            header('Location: index.php');
+            // We want to know if a new round is generate when the member 
+            // is connected to update his session data
+            $_SESSION['last_round_update'] = Round::getRoundNumber();
+
+            header('Location: index.php?p=accueil');
             
             exit();
         }

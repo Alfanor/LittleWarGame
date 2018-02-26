@@ -4,7 +4,7 @@ class AreaRessource
     protected $id; //!<@brief The AreaRessource ID    
     protected $area; //!<@brief The Area this AreaRessource belong to
     protected $ressource_id; //!<@brief The Ressource ID on this AreaRessource
-    protected $id_village; //!<@brief The Village this AreaRessource belong to
+    protected $village_id; //!<@brief The Village this AreaRessource belong to
     protected $worker; //!<@brief The number of workers on this AreaRessource
 
     private $_SQL; //!<@brief Reference on the SQL connexion
@@ -41,18 +41,18 @@ class AreaRessource
         
         $rep->execute(array(':id' => $id));
         
-        $resultat = $rep->fetchAll();
+        $results = $rep->fetchAll();
 
-        if(count($resultat) > 0)
+        if(count($results) > 0)
         {
             $area_ressources = array();
             $i = 0;
 
-            foreach($resultat as $ar)
+            foreach($results as $ar)
             {
                 $area_ressources[$i] = new AreaRessource($ar['id']);
                 $area_ressources[$i]->setRessourceId($ar['ressource_id']);
-                $area_ressources[$i]->setWorker((!isset($ar['worker']) ? 0 : $ar['worker']));
+                $area_ressources[$i]->setWorker($ar['worker']);
 
                 ++$i;
             }
@@ -168,6 +168,15 @@ class AreaRessource
     }
 
     /**
+     *  @brief Getter for AreaRessource village ID.
+     *  @return returns the AreaResource village ID
+     */
+    public function getVillageID()
+    {
+        return $this->village_id;
+    }
+
+    /**
      *  @brief Getter for AreaRessource Worker.
      *  @return returns the AreaResource Worker
      */
@@ -185,11 +194,19 @@ class AreaRessource
     }
 
     /**
-     *  @brief Setter for AreaRessource ressource.
+     *  @brief Setter for AreaRessource ressource ID.
      */
     public function setRessourceID($ressource_id)
     {
         $this->ressource_id = $ressource_id;
+    }
+
+    /**
+     *  @brief Setter for AreaRessource Village ID.
+     */
+    public function setVillageID($village_id)
+    {
+        $this->village_id = $village_id;
     }
 
     /**
