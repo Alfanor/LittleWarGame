@@ -5,9 +5,11 @@ error_reporting(E_ALL);
 
 ini_set("display_errors", 1);
 
-function __autoload($classe) {
-    include 'Classes/' . $classe . '.php';
+function autoloader($class) {
+    include 'Classes/' . $class . '.php';
 }
+
+spl_autoload_register('autoloader');
 
 session_start();
 
