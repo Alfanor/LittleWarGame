@@ -77,6 +77,14 @@ li:hover ul.submenu li {
     background-color : grey;
 }
 
+#menu span.right {
+    display : block;
+    border-left : 1px solid black;
+    text-align : center;
+    width : 15%;
+    float : right;
+}
+
 #content input {
     padding : 0px;
 }
