@@ -44,11 +44,12 @@ if(isset($_SESSION['id']))
 			{
 				$runningLvlInventory = new Inventory($resultat[0]['inventory_id']);
 				$runningLvlInventory->loadFromId();
+				$temples[$village->getName()]['inventory'] = $runningLvlInventory;
 			}
-			
+	
 			$temples[$village->getName()]['village'] = $village;
 			$temples[$village->getName()]['temple'] = $village->getTemple();			
-			$temples[$village->getName()]['inventory'] = $runningLvlInventory;
+			
 		}			
     }		
 

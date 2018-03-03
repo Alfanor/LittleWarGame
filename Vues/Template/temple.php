@@ -20,18 +20,26 @@ foreach($temples as $nomVivi => $contenu)
 		}
 	}
 	
-	echo sprintf($_LANGUAGE['FR']['TEMPLE_ACTUELS'],$currentTemple->getLevel(),$currentVillage->getName());
+	echo "Id du temple actuel : ".$currentTemple->getId()."<br/><br/>";
 	
-	echo $_LANGUAGE['FR']['TEMPLE_RESSCONSOMMEES'];
+	echo sprintf($_LANGUAGE['FR']['TEMPLE_ACTUELS'],$currentTemple->getLevel(),$currentVillage->getName())."<br/><br/>";
 	
-    echo '<ul>';
 
-    foreach($currentInventory->getRessources() as $id => $amount)
-        echo '<li>' . $_LANGUAGE['FR']['RESSOURCE_' . $id] . ' : ' . $amount . '</li>';
-
-    echo '</ul>';	
 	
-	echo $_LANGUAGE['FR']['TEMPLE_RESSDISPO'];
+	if(isset($currentInventory))
+	{
+		echo $_LANGUAGE['FR']['TEMPLE_RESSCONSOMMEES'];	
+		
+		echo '<ul>';
+
+		foreach($currentInventory->getRessources() as $id => $amount)
+			echo '<li>' . $_LANGUAGE['FR']['RESSOURCE_' . $id] . ' : ' . $amount . '</li>';
+
+		echo '</ul>';	
+	}
+	
+	
+	echo "<br/>".$_LANGUAGE['FR']['TEMPLE_RESSDISPO'];
 	
     echo '<ul>';
 
@@ -43,6 +51,7 @@ foreach($temples as $nomVivi => $contenu)
 	
 	
 	echo "<br/><br/>";
+	
 }
 
 
