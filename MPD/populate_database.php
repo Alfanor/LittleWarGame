@@ -45,7 +45,7 @@ $temple_cost_level = array();
 $wood_level_1 = 20;
 $stone_level_1 = 10;
 
-for($i = 0; $i < 10; $i++)
+for($i = 1; $i < 11; $i++)
 {
     $temple_cost_level[$i] = end($buildings)[0] + $i + 1;
 
@@ -58,6 +58,7 @@ $map_size = 51;
 
 // Array area_id => array(x, y, array(id_ressource))
 $area = array();
+$number_ar = 0;
 
 $id = 0;
 
@@ -69,7 +70,10 @@ for($y = -(floor($map_size / 2)); $y <= floor($map_size / 2); $y++)
 
         foreach($ressources as $key => $probability)
             if(rand(0, 99) <= $probability)
+            {
                 $area_ressource[] = $key;
+                $number_ar++;
+            }
 
         $area[++$id] = array($x, $y, $area_ressource);   
     }
@@ -150,6 +154,8 @@ foreach($area as $area_id => $data)
 $req_inv = 'INSERT INTO inventory VALUES ';
 $req_res = 'INSERT INTO inventory_ressource VALUES ';
 
+$number_inv_res = 0;
+
 end($inventories);
 
 $last_inv_id = key($inventories);
@@ -176,10 +182,12 @@ foreach($inventories as $inv_id => $res)
 
         else
             $req_res .= '(' . $inv_id . ', ' . $res_id . ', ' . $amount . '), ';
+
+        $number_inv_res++;
     }
 }
 
-//echo $req_inv . '<br />';
+echo $req_inv . '<br />';
 echo $req_res . '<br />';
 
 // Go to make building request
@@ -197,7 +205,7 @@ foreach($buildings as $id => $data)
         $req_build .= '(' . $id . ', ' . $data[0] . ', ' . $data[1] . ', ' . $data[2] . '), '; 
 }
 
-//echo $req_build . '<br />';
+echo $req_build . '<br />';
 
 // Go to make Temple cost level request
 $req_temple_cost = 'INSERT INTO temple_cost_level VALUES ';
@@ -214,7 +222,7 @@ foreach($temple_cost_level as $id => $inv_id)
         $req_temple_cost .= '(' . $id . ', ' . $inv_id . '), ';
 }
 
-//echo $req_temple_cost . '<br />';
+echo $req_temple_cost . '<br />';
 
 // Go to create member
 $req_member = 'INSERT INTO member VALUES (' . $member[0] . ', "' . $member[1] . '", "' . $member[2] . '")';
@@ -246,16 +254,97 @@ echo $req_temple . '<br />';
 $_SQL->beginTransaction();
 
 try {
-    $_SQL->exec($req);
-    $_SQL->exec($req_area); // ok
-    $_SQL->exec($req_ar);
-    $_SQL->exec($req_inv); // ok
-    $_SQL->exec($req_res);
-    $_SQL->exec($req_build); // ok
-    $_SQL->exec($req_temple_cost); // ok
-    $_SQL->exec($req_member);
-    $_SQL->exec($req_village);
-    $_SQL->exec($req_temple);
+    if($_SQL->exec($req) != count($ressources))
+    {
+        $_SQL->rollBack();
+
+        echo 'Erreur sur $req.';
+
+        exit;
+    }
+
+    if($_SQL->exec($req_area) != count($area))
+    {
+        $_SQL->rollBack();
+
+        echo 'Erreur sur $req_area.';
+
+        exit;
+    }
+
+    if($_SQL->exec($req_ar) != $number_ar)
+    {
+        $_SQL->rollBack();
+
+        echo 'Erreur sur $req_ar.';
+
+        exit;
+    }
+
+    if($_SQL->exec($req_inv) != count($inventories))
+    {
+        $_SQL->rollBack();
+
+        echo 'Erreur sur $req_inv.';
+
+        exit;
+    }
+
+    if($_SQL->exec($req_res) != $number_inv_res)
+    {
+        $_SQL->rollBack();
+
+        echo 'Erreur sur $req_inv_res.';
+
+        exit;
+    }
+
+    if($_SQL->exec($req_build) != count($buildings))
+    {
+        $_SQL->rollBack();
+
+        echo 'Erreur sur $req_build.';
+
+        exit;
+    }
+
+    if($_SQL->exec($req_member) != 1)
+    {
+        $_SQL->rollBack();
+
+        echo 'Erreur sur $req_member.';
+
+        exit;
+    }
+
+    if($_SQL->exec($req_village) != 2)
+    {
+        $_SQL->rollBack();
+
+        echo 'Erreur sur $req_village.';
+
+        exit;
+    }
+
+    if($_SQL->exec($req_temple) != 1)
+    {
+        $_SQL->rollBack();
+
+        echo 'Erreur sur $req_temple.';
+
+        exit;
+    }
+
+    if($_SQL->exec($req_temple_cost) != count($temple_cost_level))
+    {
+        $_SQL->rollBack();
+
+        print_r($_SQL->errorInfo());
+
+        echo 'Erreur sur $req_temple_cost.';
+
+        exit;
+    }
 
     $_SQL->commit();
 }
