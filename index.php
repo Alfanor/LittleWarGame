@@ -5,9 +5,9 @@ error_reporting(E_ALL);
 
 ini_set("display_errors", 1);
 
-function __autoload($classe) {
+spl_autoload_register(function ($classe) {
     include 'Classes/' . $classe . '.php';
-}
+});
 
 session_start();
 

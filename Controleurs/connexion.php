@@ -1,9 +1,9 @@
 <?php
 /**
  *  @file
- *  @brief This script job is te find if the member exist and store all data about it
+ *  @brief This script job is to find if the member exists and store all data about him
  *  in SESSION to limit the amount of needed SQL request on each page (0 until the 
- *  member ask for some modifications)
+ *  member ask for modifications)
  */
 if(!empty($_POST['login']) && !empty($_POST['password']))
 {

@@ -9,26 +9,26 @@
 $_CSS[] = 'common.css';
 
 require_once('Vues/Langage/FR/accueil.php');
-require_once('Vues/Langage/FR/ressource.php');
+require_once('Vues/Langage/FR/resource.php');
 
 $titre = 'Accueil';
 
 $compte_erreur = false;
-$ressources = array();
+$resources = array();
 $village_temple;
 
 // Here, the visitor is now connected, so it's a Member
 if(isset($_SESSION['id']))
 {
-    // We want to know the global amount of ressources for the member account
+    // We want to know the global amount of resources for the member account
     foreach($_SESSION['data']->getVillages() as $village)
     {
-        foreach($village->getInventory()->getRessources() as $id => $amount)
+        foreach($village->getInventory()->getResources() as $id => $amount)
         {
-            if(!isset($ressources[$id]))
-                $ressources[$id] = 0;
+            if(!isset($resources[$id]))
+                $resources[$id] = 0;
 
-            $ressources[$id] += $amount;
+            $resources[$id] += $amount;
         }
     }
 

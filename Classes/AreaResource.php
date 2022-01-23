@@ -1,18 +1,18 @@
 <?php
 class AreaRessource
 {
-    protected $id; //!<@brief The AreaRessource ID    
-    protected $area; //!<@brief The Area this AreaRessource belong to
-    protected $ressource_id; //!<@brief The Ressource ID on this AreaRessource
-    protected $id_village; //!<@brief The Village this AreaRessource belong to
-    protected $worker; //!<@brief The number of workers on this AreaRessource
+    protected $id; //!<@brief The AreaResource ID    
+    protected $area; //!<@brief The Area this AreaResource belong to
+    protected $resource_id; //!<@brief The Resource ID on this AreaResource
+    protected $id_village; //!<@brief The Village this AreaResource belong to
+    protected $worker; //!<@brief The number of workers on this AreaResource
 
     private $_SQL; //!<@brief Reference on the SQL connexion
 
     /**
-     *  @brief Constructor for the class AreaRessource.
-     *  @param $id the AreaRessource ID
-     *  @return returns the initialized AreaRessource object
+     *  @brief Constructor for the class AreaResource.
+     *  @param $id the AreaResource ID
+     *  @return returns the initialized AreaResource object
      */
 
     public function __construct($id)
@@ -22,7 +22,7 @@ class AreaRessource
     }
 
     /**
-     *  @brief This method load the data about all the Village AreaRessource 
+     *  @brief This method load the data about all the Village AreaResource 
      *  @param id the Village Area ID
      *  @return returns a list of Village if it's succeed, false in the other case
      */
@@ -31,10 +31,10 @@ class AreaRessource
         $_SQL = SQL::getInstance();
 
         $req = 'SELECT  ar.id,
-                        ar.ressource_id,
+                        ar.resource_id,
                         vf.worker 
-                FROM area_ressource ar
-                LEFT JOIN village_farmer vf ON vf.area_ressource_id = ar.id 
+                FROM area_resource ar
+                LEFT JOIN village_farmer vf ON vf.area_resource_id = ar.id 
                 WHERE ar.area_id = :id';
 
         $rep = $_SQL->prepare($req);
@@ -45,32 +45,32 @@ class AreaRessource
 
         if(count($resultat) > 0)
         {
-            $area_ressources = array();
+            $area_resources = array();
             $i = 0;
 
             foreach($resultat as $ar)
             {
-                $area_ressources[$i] = new AreaRessource($ar['id']);
-                $area_ressources[$i]->setRessourceId($ar['ressource_id']);
-                $area_ressources[$i]->setWorker((!isset($ar['worker']) ? 0 : $ar['worker']));
+                $area_resources[$i] = new AreaResource($ar['id']);
+                $area_resources[$i]->setResourceId($ar['resource_id']);
+                $area_resources[$i]->setWorker((!isset($ar['worker']) ? 0 : $ar['worker']));
 
                 ++$i;
             }
 
-            return $area_ressources;
+            return $area_resources;
         }
 
         return false;    
     }
 
     /**
-     *  @brief This method update one or many AreaRessources number worker for one Village
-     *  @param new_ar the updated AreaRessource with new values
-     *  @param old_ar the non-updated AreaRessource with old value
-     *  @param village the village the AreaRessource belong to
+     *  @brief This method update one or many AreaResources number worker for one Village
+     *  @param new_ar the updated AreaResource with new values
+     *  @param old_ar the non-updated AreaResource with old value
+     *  @param village the village the AreaResource belong to
      *  @return returns true if it's succeed, false in the other case
      */
-    public static function updateAreaRessourceWorkerListOnVillage($new_ar, $old_ar, $village)
+    public static function updateAreaResourceWorkerListOnVillage($new_ar, $old_ar, $village)
     {
         // We have to be sure that the modification are possibles
         $number_workers = 0;
@@ -94,7 +94,7 @@ class AreaRessource
         $_SQL = SQL::getInstance();
 
         // If we have enough population and nothing lesser than 0, it's ok
-        $req = 'INSERT INTO village_farmer(village_id, area_ressource_id, worker) VALUES ';
+        $req = 'INSERT INTO village_farmer(village_id, area_resource_id, worker) VALUES ';
 
         foreach($new_ar as $ar)
         {
@@ -118,7 +118,7 @@ class AreaRessource
             {
                 if($v->getId() == $village->getId())
                 {
-                    foreach($v->getAreaRessource() as &$ar)
+                    foreach($v->getAreaResource() as &$ar)
                     {
                         if(isset($new_ar[$ar->getId()]))
                             $ar->setWorker($new_ar[$ar->getId()]->getWorker());
@@ -133,12 +133,12 @@ class AreaRessource
     }
 
     /**
-     *  @brief This method define the fields to save when we ask PHP for serialize a AreaRessource object.
+     *  @brief This method define the fields to save when we ask PHP for serialize a AreaResource object.
      *  @return returns the list of attribute to save
      */
     public function __sleep()
     {
-        return array('id', 'ressource_id', 'worker');
+        return array('id', 'resource_id', 'worker');
     }
 
     /**
@@ -150,7 +150,7 @@ class AreaRessource
     }
 
     /**
-     *  @brief Getter for AreaRessource ID.
+     *  @brief Getter for AreaResource ID.
      *  @return returns the AreaResource ID
      */
     public function getId()
@@ -159,8 +159,8 @@ class AreaRessource
     }
 
     /**
-     *  @brief Getter for AreaRessource ressource ID.
-     *  @return returns the AreaResource ressource ID
+     *  @brief Getter for AreaResource resource ID.
+     *  @return returns the AreaResource resource ID
      */
     public function getRessourceID()
     {
@@ -168,7 +168,7 @@ class AreaRessource
     }
 
     /**
-     *  @brief Getter for AreaRessource Worker.
+     *  @brief Getter for AreaResource Worker.
      *  @return returns the AreaResource Worker
      */
     public function getWorker()
@@ -177,7 +177,7 @@ class AreaRessource
     }
 
     /**
-     *  @brief Setter for AreaRessource ID.
+     *  @brief Setter for AreaResource ID.
      */
     public function setId($id)
     {
@@ -185,15 +185,15 @@ class AreaRessource
     }
 
     /**
-     *  @brief Setter for AreaRessource ressource.
+     *  @brief Setter for AreaResource resource.
      */
-    public function setRessourceID($ressource_id)
+    public function setResourceID($resource_id)
     {
-        $this->ressource_id = $ressource_id;
+        $this->resource_id = $resource_id;
     }
 
     /**
-     *  @brief Setter for AreaRessource Worker.
+     *  @brief Setter for AreaResource Worker.
      */
     public function setWorker($worker)
     {

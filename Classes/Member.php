@@ -59,6 +59,28 @@ class Member {
     {
         $this->_SQL = SQL::getInstance();
     }
+
+    /**
+     * @brief This method create a new member in the database.
+     * @param $username the user login
+     * @param $password the user password
+     * @param $_SQL, an SQL instance
+     * @return true on success, false on failure
+     */
+    public static function createMember($login, $password, $_SQL) {
+        $req = 'INSERT INTO member(login, password) VALUES(:login, :password)';
+    
+        $rep = $_SQL->prepare($req);
+        
+        $rep->execute(array(':login' => $login, 
+                            ':password' => password_hash($password, PASSWORD_BCRYPT)));
+
+        if($rep->rowCount() == 1) {
+            return true;
+        }
+
+        return false;
+    }
     
     /**
      *  @brief Getter for Member ID.

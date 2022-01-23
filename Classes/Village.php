@@ -93,7 +93,7 @@ class Village
     }
 
     /**
-     *  @brief This method load the data about all the Member Village :
+     *  @brief This method load the data about the member's Village :
      *          - Workers in the Village
      *          - Temple in the Village
      *          - Buildings in the Village

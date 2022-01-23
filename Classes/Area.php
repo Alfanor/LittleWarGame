@@ -24,7 +24,7 @@ class Area
 
     /**
      *  @brief This method load all information of this Area based on the id attribute.
-     *  @return returns true if it's succeed, false on the other case
+     *  @return returns true if it succeed, false on the other case
      */
     public function loadFromId()
     {
@@ -49,7 +49,7 @@ class Area
     }
 
     /**
-     *  @brief This method define the fields to save when we ask PHP for serialize a Area object.
+     *  @brief This method define the fields to save when we ask PHP for serialize an Area object.
      *  @return returns the list of attribute to save
      */
     public function __sleep()
@@ -58,11 +58,31 @@ class Area
     }
 
     /**
-     *  @brief This method get an reference on the current SQL instance when PHP deserialize a Area object.
+     *  @brief This method get an reference on the current SQL instance when PHP deserialize an Area object.
      */
     public function __wakeup()
     {
         $this->_SQL = SQL::getInstance();
+    }
+
+    /**
+     * @brief This method create a new area in the database.
+     * @param $x the x coordinate
+     * @param $y the y coordinate
+     * @return true on success, false on failure
+     */
+    public static function createArea($x, $y, $_SQL) {
+        $req = 'INSERT INTO area(x, y) VALUES(:x, :y)';
+    
+        $rep = $_SQL->prepare($req);
+        
+        $rep->execute(array(':x' => $x, ':y' => $y));
+
+        if($rep->rowCount() == 1) {
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -94,14 +114,16 @@ class Area
 
     /**
      *  @brief Setter for Area ID.
+     *  @param $id the Area ID
      */
     public function setId($id)
     {
         $this->id = $id;
     }
 
-        /**
+    /**
      *  @brief Setter for Area X coordinate.
+     *  @param $x the x coordinate
      */
     public function setX($x)
     {
@@ -110,6 +132,7 @@ class Area
 
     /**
      *  @brief Setter for Area Y coordinate.
+     *  @param $y the y coordinate
      */
     public function setY($y)
     {
